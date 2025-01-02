@@ -30,9 +30,19 @@ public class GameScreen : MonoBehaviour
     public float longTapThreshold = 0.5f;  // Seconds for long tap
     public float swipeThreshold = 50f;     // Minimum swipe distance
 
+    void Start()
+    {
+        SetPortrait();
+    }
+
     void Update()
     {
         DetectTouchOrClick();
+    }
+
+    public void SetPortrait()
+    {
+        Screen.orientation = ScreenOrientation.Portrait;
     }
 
     public void NewGame()
@@ -163,6 +173,7 @@ public class GameScreen : MonoBehaviour
         else if (round > 0 && !gameStarted)
         {
             // Return to home screen
+            SetPortrait();
             gameObject.SetActive(false);
         }
     }

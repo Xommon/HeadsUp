@@ -30,6 +30,7 @@ public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPoin
             if (pointerDownTime >= longPressThreshold)
             {
                 // Start a new game
+                SetLandscape();
                 gameScreen.gameObject.SetActive(true);
                 gameScreen.packItems = items;
                 gameScreen.items = items.Split(",").ToList();
@@ -38,6 +39,11 @@ public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPoin
                 isPointerDown = false;  // Reset after detecting long press
             }
         }
+    }
+
+    public void SetLandscape()
+    {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -53,9 +59,9 @@ public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPoin
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (pointerDownTime < longPressThreshold)
+        /*if (pointerDownTime < longPressThreshold)
         {
             Debug.Log("Click detected on: " + gameObject.name);
-        }
+        }*/
     }
 }

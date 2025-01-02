@@ -38,4 +38,9 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         scrollView.SetActive(true);
     }
+
+    public void OpenPlayersWindow()
+    {
+        playersWindow.SetActive(!playersWindow.activeInHierarchy);
+    }
 }
