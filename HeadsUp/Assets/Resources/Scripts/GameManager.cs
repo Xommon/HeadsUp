@@ -23,61 +23,19 @@ public class GameManager : MonoBehaviour
     public Button playersButton;
     public TMP_InputField[] playerNames;
     public int totalRounds;
-    public float roundTime;
+    public float turnTime;
 
     void Start()
     {
-        // Get the RectTransform component
-        titleRect = titleText.GetComponent<RectTransform>();
-
-        // Set initial positions
-        startPosition = titleRect.anchoredPosition;
-        endPosition = new Vector3(0, Screen.height / 2 - 50, 0);  // Moves to top with padding
-
         // Disable content at the start
         scrollView.SetActive(false);
         titleText.gameObject.SetActive(true);
-
-        // Start coroutine to delay the movement
         StartCoroutine(MoveTitle());
-    }
-
-    void Update()
-    {
-        if (moveTitle)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-
-            // Lerp position
-            titleRect.anchoredPosition = Vector3.Lerp(startPosition, endPosition, t);
-
-            // Lerp font size
-            titleText.fontSize = Mathf.Lerp(startFontSize, endFontSize, t);
-
-            // Stop lerping and enable content after completion
-            if (t >= 1f)
-            {
-                moveTitle = false;
-
-                // Enable content once the animation is done
-                if (scrollView != null)
-                {
-                    scrollView.SetActive(true);
-                }
-            }
-        }
     }
 
     IEnumerator MoveTitle()
     {
-        yield return new WaitForSeconds(2.0f);
-        moveTitle = true;
-        elapsedTime = 0f;  // Reset elapsed time to start lerp fresh
-    }
-
-    public void OpenPlayers()
-    {
-        playersWindow.SetActive(!playersWindow.activeInHierarchy);
+        yield return new WaitForSeconds(3.0f);
+        scrollView.SetActive(true);
     }
 }

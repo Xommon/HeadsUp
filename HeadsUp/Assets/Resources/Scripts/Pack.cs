@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Linq;
 
 [ExecuteAlways]
 public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
@@ -30,7 +31,8 @@ public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPoin
             {
                 // Start a new game
                 gameScreen.gameObject.SetActive(true);
-                gameScreen.items = items.Split(",");
+                gameScreen.packItems = items;
+                gameScreen.items = items.Split(",").ToList();
                 gameScreen.NewGame();
 
                 isPointerDown = false;  // Reset after detecting long press

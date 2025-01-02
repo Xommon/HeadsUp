@@ -10,7 +10,10 @@ public class GameScreen : MonoBehaviour
 {
     public GameManager gameManager;
     public Dictionary<string, int> players = new Dictionary<string, int>();
-    public string[] items;
+    public List<string> items = new List<string>();
+    [HideInInspector]
+    public string packItems;
+    private int itemIndex;
     public int turn;
     public int round;
     public TextMeshProUGUI beginText;
@@ -26,11 +29,6 @@ public class GameScreen : MonoBehaviour
 
     public float longTapThreshold = 0.5f;  // Seconds for long tap
     public float swipeThreshold = 50f;     // Minimum swipe distance
-
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -184,6 +182,7 @@ public class GameScreen : MonoBehaviour
         {
             // Correct
             players[players.Keys.ElementAt(turn)]++;
+            items.RemoveAt(itemIndex);
             NextItem();
         }
     }
@@ -202,7 +201,7 @@ public class GameScreen : MonoBehaviour
             // Start the round
             gameStarted = true;
             NextItem();
-            StartCoroutine(RoundTimer(gameManager.roundTime));
+            StartCoroutine(RoundTimer(gameManager.turnTime));
         }
     }
 
@@ -213,7 +212,6 @@ public class GameScreen : MonoBehaviour
         yield return new WaitForSeconds(time - 5);
         animator.enabled = true;
         animator.Play("colour_shift", -1, 0f);
-        Debug.Log("5 seconds left!");
         yield return new WaitForSeconds(5.0f);
         gameStarted = false;
         beginText.text = "Time's Up!";
@@ -245,7 +243,14 @@ public class GameScreen : MonoBehaviour
 
     public void NextItem()
     {
-        beginText.text = items[UnityEngine.Random.Range(0, items.Length)];
+        // Replenish the list if it's getting too low
+        if (items.Count < 2)
+        {
+            items = packItems.Split(",").ToList();
+        }
+
+        itemIndex = UnityEngine.Random.Range(0, items.Count);
+        beginText.text = items[itemIndex];
     }
 
     IEnumerator EndGame()
@@ -256,7 +261,7 @@ public class GameScreen : MonoBehaviour
         players = players.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
         // Display scores
-        beginText.text = "<size=38>";
+        beginText.text = "<size=40>";
 
         foreach (KeyValuePair<string, int> entry in players)
         {
