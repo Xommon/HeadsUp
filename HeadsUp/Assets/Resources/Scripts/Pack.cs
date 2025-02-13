@@ -2,26 +2,32 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 using System.Linq;
+using UnityEditor;
 
 [ExecuteAlways]
 public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
-    private TextMeshProUGUI text;
+    private TextMeshProUGUI textDisplay;
     private bool isPointerDown = false;
     private float pointerDownTime = 0f;
     private float longPressThreshold = 0.75f; // Time in seconds for long press detection
+    public string category;
     [TextArea(10, 20)]
     public string items;
-    public GameScreen gameScreen;
-
-    void Start()
-    {
-        text = GetComponentInChildren<TextMeshProUGUI>();
-    }
+    public float fontSize = 24;
+    private GameScreen gameScreen;
+    private GameManager gameManager;
 
     void Update()
     {
-        gameObject.name = "Pack: " + text.text;
+        // Find Game Manager
+        gameManager = gameManager == null ? FindObjectOfType<GameManager>() : gameManager;
+
+        // Update text
+        textDisplay = textDisplay == null ? GetComponentInChildren<TextMeshProUGUI>() : textDisplay;
+        gameObject.name = category == "" ? "Pack" : "Pack: " + category;
+        textDisplay.text = category;
+        textDisplay.fontSize = fontSize;
 
         // Check for long press
         if (isPointerDown)
@@ -30,7 +36,9 @@ public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPoin
             if (pointerDownTime >= longPressThreshold)
             {
                 // Start a new game
+                AudioManager.Play("tap");
                 SetLandscape();
+                gameScreen = gameManager.gameScreen;
                 gameScreen.gameObject.SetActive(true);
                 gameScreen.packItems = items;
                 gameScreen.items = items.Split(",").ToList();
@@ -43,7 +51,7 @@ public class Pack : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPoin
 
     public void SetLandscape()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        //Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     public void OnPointerDown(PointerEventData eventData)

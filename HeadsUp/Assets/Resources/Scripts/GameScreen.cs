@@ -42,7 +42,7 @@ public class GameScreen : MonoBehaviour
 
     public void SetPortrait()
     {
-        Screen.orientation = ScreenOrientation.Portrait;
+        //Screen.orientation = ScreenOrientation.Portrait;
     }
 
     public void NewGame()
@@ -183,6 +183,7 @@ public class GameScreen : MonoBehaviour
         if (gameStarted)
         {
             // Pass
+            AudioManager.Play("incorrect");
             NextItem();
         }
     }
@@ -194,6 +195,7 @@ public class GameScreen : MonoBehaviour
             // Correct
             players[players.Keys.ElementAt(turn)]++;
             items.RemoveAt(itemIndex);
+            AudioManager.Play("correct");
             NextItem();
         }
     }
@@ -210,6 +212,7 @@ public class GameScreen : MonoBehaviour
         else
         {
             // Start the round
+            AudioManager.Play("tap");
             gameStarted = true;
             NextItem();
             StartCoroutine(RoundTimer(gameManager.turnTime));
@@ -226,6 +229,7 @@ public class GameScreen : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         gameStarted = false;
         beginText.text = "Time's Up!";
+        AudioManager.Play("end");
         yield return new WaitForSeconds(5.0f);
 
         // Turn or round up

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public TMP_InputField[] playerNames;
     public int totalRounds;
     public float turnTime;
+    public GameScreen gameScreen;
 
     void Start()
     {
@@ -42,5 +43,6 @@ public class GameManager : MonoBehaviour
     public void OpenPlayersWindow()
     {
         playersWindow.SetActive(!playersWindow.activeInHierarchy);
+        AudioManager.Play("tap");
     }
 }
